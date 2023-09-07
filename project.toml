@@ -1,0 +1,6 @@
+name = "dictant"
+language = "uk"
+build_name = "диктант"
+version = "0.1.0"
+description = "Диктант — плагін Jieshuo для зручного надиктовування тексту."
+authors = ["Ruslan Iskov <ruslan.rv.ua@gmail.com>"]
