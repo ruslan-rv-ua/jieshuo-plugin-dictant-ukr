@@ -1,2 +1,3 @@
 build/
-deploy.py
+dist/
+deploy_function.py
