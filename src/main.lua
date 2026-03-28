@@ -31,6 +31,7 @@ local CAPITALIZE_SYMBOL = "~"
 local function decodePunctuations(str)
     -- replace "двокрапка" with ":" and so on
     str = string.gsub(str, "двокрапка", ":") -- ! before `крапка`, because `крапка` is part of the word
+    str = string.gsub(str, "три крапки", "...") -- ! before `крапки`, because `крапки` is part of the phrase
     str = string.gsub(str, "крапка", ".")
     str = string.gsub(str, "знак питання", "?")
     str = string.gsub(str, "знак оклику", "!")
@@ -38,6 +39,7 @@ local function decodePunctuations(str)
     str = string.gsub(str, "ліва дужка", "(")
     str = string.gsub(str, "права дужка", ")")
     str = string.gsub(str, "тире", "—")
+    str = string.gsub(str, "дефіс", "-")
     str = string.gsub(str, "абзац", "\n")
     str = string.gsub(str, CAPITALIZE_PHRASE .. " ", CAPITALIZE_SYMBOL)
     return str
