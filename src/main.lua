@@ -24,8 +24,6 @@ import "java.util.Locale"
 import "android.speech.SpeechRecognizer"
 import "android.speech.RecognitionListener"
 import "android.speech.RecognizerIntent"
-import "java.util.Locale"
-import "android.content.Intent"
 
 
 local CAPITALIZE_SYMBOL = "~"
@@ -54,6 +52,8 @@ end
 local function stripLines(str)
     -- strip every line of leading and trailing whitespace
     str = string.gsub(str, "\n%s*(.-)%s*\n", "\n%1\n")
+    str = string.gsub(str, "^%s*(.-)%s*\n", "%1\n")   -- first line
+    str = string.gsub(str, "\n%s*(.-)%s*$", "\n%1")   -- last line
     return str
 end
 
@@ -76,11 +76,15 @@ local function capitalize(str)
             capitalizeIndex = i
         end
         if char == "." or char == "?" or char == "!" then
-            chars[capitalizeIndex] = utf8.upper(chars[capitalizeIndex])
+            if capitalizeIndex > 0 then
+                chars[capitalizeIndex] = utf8.upper(chars[capitalizeIndex])
+            end
             capitalizeIndex = 0
         elseif char == CAPITALIZE_SYMBOL then
             chars[i] = ""
-            chars[i + 1] = utf8.upper(chars[i + 1])
+            if i + 1 <= #chars then
+                chars[i + 1] = utf8.upper(chars[i + 1])
+            end
         end
     end
     return table.concat(chars)
@@ -100,17 +104,21 @@ local function startListening()
 
                 if string.sub(recognizedText, 1, #CLEAR_EDITOR_PHRASE) == CLEAR_EDITOR_PHRASE then
                     prevText = ""
-                    recognizedText = string.sub(recognizedText, #CLEAR_EDITOR_PHRASE + 1) -- remove the CLEAR_EDITOR_PHRASE from the recognized text
-                    recognizedText = stripString(recognizedText)
+                    recognizedText = stripString(string.sub(recognizedText, #CLEAR_EDITOR_PHRASE + 1))
                 end
-                recognizedText = decodePunctuations(recognizedText)
-                local newText = prevText .. " " .. recognizedText
-                newText = formatPunctuations(newText)
-                newText = stripLines(newText)
-                newText = capitalize(newText)
+                if recognizedText == "" then
+                    service.setText(node, prevText)
+                    service.appendSpeak(prevText)
+                else
+                    recognizedText = decodePunctuations(recognizedText)
+                    local newText = prevText .. " " .. recognizedText
+                    newText = formatPunctuations(newText)
+                    newText = stripLines(newText)
+                    newText = capitalize(newText)
 
-                service.setText(node, newText)
-                service.appendSpeak(newText)
+                    service.setText(node, newText)
+                    service.appendSpeak(newText)
+                end
             else
                 -- If no verbalization was detected on the first attempt, stop voice recognition
                 speechRecognizer.destroy()
