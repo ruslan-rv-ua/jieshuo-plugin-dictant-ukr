@@ -127,6 +127,7 @@ local function startListening()
         end,
         onError = function()
             -- An error occurred, stop voice recognition
+            service.speak("Помилка розпізнавання")
             speechRecognizer.destroy()
             return false
         end
