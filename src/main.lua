@@ -111,7 +111,7 @@ local function startListening()
                     service.appendSpeak(prevText)
                 else
                     recognizedText = decodePunctuations(recognizedText)
-                    local newText = prevText .. " " .. recognizedText
+                    local newText = prevText == "" and recognizedText or prevText .. " " .. recognizedText
                     newText = formatPunctuations(newText)
                     newText = stripLines(newText)
                     newText = capitalize(newText)
