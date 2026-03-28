@@ -1,5 +1,5 @@
 -- name: Dictant
--- version: 0.1
+-- version: 0.1.0
 -- type: JieShuo plugin
 -- description: Dictate text to the editor using voice recognition (Ukrainian)
 -- author: Ruslan Iskov <ruslan.rv.ua@gmail.com>
