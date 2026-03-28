@@ -67,8 +67,8 @@ local function capitalize(str)
     -- capitalize the first letter of every sentence
     -- also capitalize letters after CAPITALIZE_SYMBOL and delete CAPITALIZE_SYMBOL
     local chars = {}
-    for i = 1, utf8.len(str) do
-        chars[i] = utf8.sub(str, i, i)
+    for _, codepoint in utf8.codes(str) do
+        chars[#chars + 1] = utf8.char(codepoint)
     end
     local capitalizeIndex = 0
     for i, char in ipairs(chars) do
