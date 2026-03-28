@@ -8,6 +8,7 @@
 
 local CLEAR_EDITOR_PHRASE = "диктант"
 local CAPITALIZE_PHRASE = "з великої"
+local DELETE_LAST_PHRASE = "видали останнє"
 local VIBRATE = true
 
 -- end of settings
@@ -109,7 +110,17 @@ local function startListening()
                 local recognizedText = data.get(0)
                 local prevText = service.getText(node)
 
-                if string.sub(recognizedText, 1, #CLEAR_EDITOR_PHRASE) == CLEAR_EDITOR_PHRASE then
+                if recognizedText == DELETE_LAST_PHRASE then
+                    local stripped = stripString(prevText)
+                    local newText = string.match(stripped, "^(.-)%s*%S+%s*$") or ""
+                    service.setText(node, newText)
+                    if newText == "" then
+                        service.appendSpeak("Нічого видаляти")
+                    else
+                        service.appendSpeak(newText)
+                    end
+                    return
+                elseif string.sub(recognizedText, 1, #CLEAR_EDITOR_PHRASE) == CLEAR_EDITOR_PHRASE then
                     prevText = ""
                     recognizedText = stripString(string.sub(recognizedText, #CLEAR_EDITOR_PHRASE + 1))
                 end
