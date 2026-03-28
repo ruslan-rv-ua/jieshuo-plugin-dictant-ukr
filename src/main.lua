@@ -147,7 +147,7 @@ local context = activity or service
 if VIBRATE then
     local vibrator = context.getSystemService(Context.VIBRATOR_SERVICE)
     if vibrator.hasVibrator() then
-        vibrator.vibrate(333) -- арта по русні 😀
+        vibrator.vibrate(333)
     end
 end
 
