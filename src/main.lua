@@ -65,6 +65,11 @@ local function formatPunctuations(str)
     return str
 end
 
+local function collapseSpaces(str)
+    str = string.gsub(str, " +", " ")
+    return str
+end
+
 local function capitalize(str)
     -- capitalize the first letter of every sentence
     -- also capitalize letters after CAPITALIZE_SYMBOL and delete CAPITALIZE_SYMBOL
@@ -115,6 +120,7 @@ local function startListening()
                     recognizedText = decodePunctuations(recognizedText)
                     local newText = prevText == "" and recognizedText or prevText .. " " .. recognizedText
                     newText = formatPunctuations(newText)
+                    newText = collapseSpaces(newText)
                     newText = stripLines(newText)
                     newText = capitalize(newText)
 
